@@ -1,0 +1,8 @@
+{
+  "name": "node-starter",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Build completed - Django static files ready'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }}'s Profile - EduPlatform{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Profile Header -->
+    <div class="bg-gradient-to-r from-black to-gray-900 rounded-lg shadow-xl p-8 mb-8">
+        <div class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
+            <div class="flex-shrink-0">
+                {% if user.profile_picture %}
+                    <img src="{{ user.profile_picture.url }}" alt="Profile Picture" 
+                         class="w-24 h-24 rounded-full border-4 border-gold">
+                {% else %}
+                    <div class="w-24 h-24 bg-gold rounded-full flex items-center justify-center border-4 border-gold">
+                        <span class="text-3xl font-bold text-black">{{ user.username|first|upper }}</span>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="flex-1 text-center md:text-left">
+                <h1 class="text-3xl font-bold text-white">{{ user.first_name }} {{ user.last_name }}</h1>
+                <p class="text-gold text-xl">@{{ user.username }}</p>
+                {% if user.bio %}
+                    <p class="text-gray-300 mt-2">{{ user.bio }}</p>
+                {% endif %}
+                
+                <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-4">
+                    <div class="bg-gray-800 rounded-lg px-4 py-2">
+                        <div class="text-2xl font-bold text-gold">{{ user.total_points|default:0 }}</div>
+                        <div class="text-sm text-gray-300">Total Points</div>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg px-4 py-2">
+                        <div class="text-2xl font-bold text-gold">{{ user.level|default:1 }}</div>
+                        <div class="text-sm text-gray-300">Level</div>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg px-4 py-2">
+                        <div class="text-2xl font-bold text-gold">{{ progress_percentage|floatformat:0 }}%</div>
+                        <div class="text-sm text-gray-300">Progress</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex-shrink-0">
+                <a href="{% url 'users:edit_profile' %}" 
+                   class="bg-gold hover:bg-yellow-500 text-black font-medium py-2 px-6 rounded-lg transition-colors">
+                    <i class="fas fa-edit mr-2"></i>Edit Profile
+                </a>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="mt-6">
+            <div class="flex justify-between text-sm text-gray-300 mb-2">
+                <span>Overall Learning Progress</span>
+                <span>{{ progress_percentage|floatformat:0 }}%</span>
+            </div>
+            <div class="w-full bg-gray-700 rounded-full h-3">
+                <div class="bg-gold rounded-full h-3 progress-bar" style="width: {{ progress_percentage }}%"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Badges Section -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">
+                        <i class="fas fa-trophy text-gold mr-2"></i>Badges & Achievements
+                    </h2>
+                    <span class="bg-gold text-black px-3 py-1 rounded-full text-sm font-medium">
+                        {{ user_badges.count }} Badge{{ user_badges.count|pluralize }}
+                    </span>
+                </div>
+                
+                {% if user_badges %}
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {% for user_badge in user_badges %}
+                            <div class="text-center p-4 border border-gray-200 rounded-lg hover:border-gold transition-colors">
+                                <div class="text-3xl mb-2">{{ user_badge.badge.icon }}</div>
+                                <h3 class="font-semibold text-gray-900 text-sm mb-1">{{ user_badge.badge.name }}</h3>
+                                <p class="text-xs text-gray-600 mb-2">{{ user_badge.badge.description }}</p>
+                                <span class="text-xs text-gray-500">{{ user_badge.earned_at|date:"M d, Y" }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-12">
+                        <div class="text-6xl text-gray-300 mb-4">🏆</div>
+                        <h3 class="text-lg font-medium text-gray-600 mb-2">No badges yet</h3>
+                        <p class="text-gray-500 mb-4">Complete lessons and quizzes to earn your first badge!</p>
+                        <a href="{% url 'lessons:list' %}" 
+                           class="inline-block bg-gold hover:bg-yellow-500 text-black font-medium py-2 px-4 rounded-lg transition-colors">
+                            Start Learning
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Quick Stats -->
+        <div class="space-y-6">
+            <!-- Account Info -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Account Information</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Email:</span>
+                        <span class="text-gray-900">{{ user.email }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Joined:</span>
+                        <span class="text-gray-900">{{ user.date_joined|date:"M d, Y" }}</span>
+                    </div>
+                    {% if user.date_of_birth %}
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Birthday:</span>
+                            <span class="text-gray-900">{{ user.date_of_birth|date:"M d, Y" }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                <div class="space-y-3">
+                    <a href="{% url 'lessons:list' %}" 
+                       class="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-gold hover:bg-gray-50 transition-all">
+                        <i class="fas fa-book text-gold mr-3"></i>Browse Lessons
+                    </a>
+                    <a href="{% url 'quizzes:list' %}" 
+                       class="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-gold hover:bg-gray-50 transition-all">
+                        <i class="fas fa-question-circle text-gold mr-3"></i>Take a Quiz
+                    </a>
+                    <a href="{% url 'progress:dashboard' %}" 
+                       class="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-gold hover:bg-gray-50 transition-all">
+                        <i class="fas fa-chart-line text-gold mr-3"></i>View Progress
+                    </a>
+                    <a href="{% url 'progress:leaderboard' %}" 
+                       class="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-gold hover:bg-gray-50 transition-all">
+                        <i class="fas fa-users text-gold mr-3"></i>Leaderboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
