@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto mt-8">
+
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Leaderboard</h1>
+
+  <table class="min-w-full bg-white shadow rounded-lg overflow-hidden">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="p-3 text-left">Rank</th>
+        <th class="p-3 text-left">User</th>
+        <th class="p-3 text-left">Points</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for learner in top_learners %}
+      <tr class="border-t {% if learner == request.user %}bg-blue-50{% endif %}">
+        <td class="p-3">{{ forloop.counter }}</td>
+        <td class="p-3">{{ learner.username }}</td>
+        <td class="p-3 font-semibold">{{ learner.total_points }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="3" class="p-4 text-gray-500">No learners yet.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="mt-6 text-center">
+    <p class="text-gray-700">Your Rank: <span class="font-bold text-blue-600">{{ user_rank }}</span></p>
+  </div>
+
+</div>
+{% endblock %}

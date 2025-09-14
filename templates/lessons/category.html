@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ category.name }} Lessons{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto py-10 px-4">
+  <h1 class="text-3xl font-bold mb-6">{{ category.name }} Lessons</h1>
+
+  {% if lessons %}
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for lesson in lessons %}
+        <div class="bg-white shadow-md rounded-xl p-6 hover:shadow-lg transition">
+          <h2 class="text-xl font-semibold mb-2">{{ lesson.title }}</h2>
+          <p class="text-gray-500 text-sm mb-4">Difficulty: {{ lesson.get_difficulty_display }}</p>
+          <a href="{% url 'lessons:detail' lesson.pk %}"
+             class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+            View Lesson
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-gray-500">No lessons available in this category yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto mt-8 space-y-8">
+
+  <!-- Recent Completions -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Last 30 Days</h2>
+    <p class="text-gray-700">Lessons completed: <span class="font-semibold">{{ recent_completions }}</span></p>
+  </div>
+
+  <!-- Lesson Progress -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Lesson Progress</h2>
+    <table class="min-w-full border">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="p-2 text-left">Lesson</th>
+          <th class="p-2 text-left">Category</th>
+          <th class="p-2 text-left">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for lp in lesson_progress %}
+        <tr class="border-t">
+          <td class="p-2">{{ lp.lesson.title }}</td>
+          <td class="p-2">{{ lp.lesson.category.name }}</td>
+          <td class="p-2">
+            {% if lp.completed %}
+              <span class="text-green-600 font-semibold">Completed</span>
+            {% else %}
+              <span class="text-gray-500">In Progress</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3" class="p-4 text-gray-500">No lesson progress yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Quiz Progress -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Quiz Progress</h2>
+    <table class="min-w-full border">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="p-2 text-left">Quiz</th>
+          <th class="p-2 text-left">Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for qp in quiz_progress %}
+        <tr class="border-t">
+          <td class="p-2">{{ qp.quiz.title }}</td>
+          <td class="p-2">{{ qp.score }}%</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="2" class="p-4 text-gray-500">No quiz progress yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

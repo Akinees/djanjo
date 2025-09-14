@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto mt-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Notifications</h1>
+    <a href="?mark_all_read=1" class="text-sm text-blue-600 hover:underline">
+      Mark all as read
+    </a>
+  </div>
+
+  <div class="bg-white shadow rounded-lg divide-y">
+    {% for notification in page_obj %}
+      <div class="p-4 flex justify-between items-start {% if not notification.read %}bg-gray-100{% endif %}">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-800">{{ notification.title }}</h2>
+          <p class="text-sm text-gray-600">{{ notification.message }}</p>
+          <span class="text-xs text-gray-500">
+            {{ notification.created_at|date:"M d, Y H:i" }}
+          </span>
+        </div>
+
+        {% if not notification.read %}
+        <form method="post" action="{% url 'notifications:mark_as_read' notification.id %}">
+          {% csrf_token %}
+          <button type="submit" class="text-blue-600 hover:underline text-sm">
+            Mark as read
+          </button>
+        </form>
+        {% endif %}
+      </div>
+    {% empty %}
+      <p class="p-4 text-gray-500">No notifications yet.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex justify-center mt-6">
+    <nav class="inline-flex space-x-2">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-1 border rounded-lg text-sm hover:bg-gray-100">
+          Previous
+        </a>
+      {% endif %}
+
+      <span class="px-3 py-1 border rounded-lg bg-blue-600 text-white text-sm">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </span>
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-1 border rounded-lg text-sm hover:bg-gray-100">
+          Next
+        </a>
+      {% endif %}
+    </nav>
+  </div>
+</div>
+{% endblock %}

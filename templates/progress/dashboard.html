@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto mt-8 space-y-8">
+
+  <!-- Progress Overview -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Learning Progress</h2>
+    <p class="text-gray-700">You’ve completed <span class="font-semibold">{{ completed_lessons }}</span> out of <span class="font-semibold">{{ total_lessons }}</span> lessons.</p>
+    
+    <div class="w-full bg-gray-200 rounded-full h-4 mt-3">
+      <div class="bg-blue-600 h-4 rounded-full" style="width: {{ progress_percentage }}%"></div>
+    </div>
+    <p class="text-sm text-gray-500 mt-1">{{ progress_percentage|floatformat:1 }}% completed</p>
+  </div>
+
+  <!-- Recent Lessons -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Recently Completed Lessons</h2>
+    <ul class="divide-y">
+      {% for lp in recent_lessons %}
+      <li class="py-2 flex justify-between">
+        <span class="text-gray-700">{{ lp.lesson.title }}</span>
+        <span class="text-sm text-gray-500">{{ lp.completed_at|date:"M d, Y" }}</span>
+      </li>
+      {% empty %}
+      <p class="text-gray-500">No recent lessons yet.</p>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Quiz Performance -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Quiz Performance</h2>
+    <p class="text-gray-700">Average Quiz Score: <span class="font-semibold">{{ avg_quiz_score|floatformat:1 }}%</span></p>
+  </div>
+
+  <!-- Category Progress -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Category Progress</h2>
+    <div class="grid md:grid-cols-2 gap-4">
+      {% for cat in categories %}
+      <div class="border rounded p-4">
+        <h3 class="font-semibold text-gray-800">{{ cat.name }}</h3>
+        <p class="text-sm text-gray-600">{{ cat.completed_lessons }} / {{ cat.total_lessons }} lessons</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Streak -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Current Streak</h2>
+    <p class="text-2xl font-bold text-blue-600">{{ streak.current_streak }} days</p>
+  </div>
+
+  <!-- Goals -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Active Learning Goals</h2>
+    <ul class="divide-y">
+      {% for goal in active_goals %}
+      <li class="py-2 flex justify-between">
+        <span>{{ goal.title }}</span>
+        <span class="text-sm text-gray-500">Ends {{ goal.end_date }}</span>
+      </li>
+      {% empty %}
+      <p class="text-gray-500">No active goals.</p>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Points -->
+  <div class="bg-white rounded-lg shadow p-6 text-center">
+    <h2 class="text-xl font-bold text-gray-800 mb-2">Total Points</h2>
+    <p class="text-3xl font-bold text-blue-600">{{ total_points }}</p>
+  </div>
+
+</div>
+{% endblock %}

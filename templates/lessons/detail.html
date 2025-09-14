@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ lesson.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-10 px-4">
+  <div class="bg-white shadow-md rounded-xl p-6">
+    <h1 class="text-2xl font-bold mb-4">{{ lesson.title }}</h1>
+    <p class="text-gray-600 mb-2">Category: {{ lesson.category.name }}</p>
+    <p class="text-gray-500 mb-4">Difficulty: {{ lesson.get_difficulty_display }}</p>
+
+    <div class="prose max-w-none mb-6">
+      {{ lesson.content|safe }}
+    </div>
+
+    {% if user.is_authenticated %}
+      {% if user_completed %}
+        <p class="text-green-600 font-semibold mb-4">✅ You have completed this lesson.</p>
+      {% else %}
+        <form method="post" action="{% url 'lessons:mark_complete' lesson.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+            Mark as Complete
+          </button>
+        </form>
+      {% endif %}
+    {% else %}
+      <p class="text-gray-500">Login to track your progress.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

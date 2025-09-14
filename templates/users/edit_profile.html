@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto py-10 px-4">
+  <h1 class="text-2xl font-bold mb-6 text-center">Edit Profile</h1>
+
+  <form method="post" enctype="multipart/form-data" class="space-y-5 bg-white shadow-lg rounded-xl p-6">
+    {% csrf_token %}
+    {% for field in form %}
+      <div>
+        <label class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+        {{ field|add_class:"w-full border rounded-lg px-3 py-2 mt-1" }}
+        {% if field.errors %}
+          <p class="text-red-500 text-sm">{{ field.errors|striptags }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700">
+      Save Changes
+    </button>
+  </form>
+</div>
+{% endblock %}

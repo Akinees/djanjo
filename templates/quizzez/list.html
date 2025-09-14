@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Quizzes{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto py-8 px-4">
+  <h1 class="text-3xl font-bold mb-6">Available Quizzes</h1>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    {% for quiz in quizzes %}
+      <div class="bg-white shadow-md rounded-xl p-6 hover:shadow-lg transition">
+        <h2 class="text-xl font-semibold">{{ quiz.title }}</h2>
+        <p class="text-gray-600 mt-2">{{ quiz.description|truncatechars:100 }}</p>
+
+        <div class="mt-4 flex items-center justify-between text-sm text-gray-500">
+          <span>Attempts: {{ quiz.attempt_count }}</span>
+          <span>Avg. Score: {{ quiz.avg_score|default:"0"|floatformat:1 }}%</span>
+        </div>
+
+        <a href="{% url 'quizzes:detail' quiz.id %}" 
+           class="mt-4 inline-block bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+          View Quiz
+        </a>
+      </div>
+    {% empty %}
+      <p>No quizzes available yet.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

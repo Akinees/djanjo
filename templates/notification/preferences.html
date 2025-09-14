@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-3xl mx-auto mt-8">
+  <h1 class="text-2xl font-bold mb-6 text-gray-800">Notification Preferences</h1>
+
+  <form method="post" class="bg-white p-6 rounded-lg shadow space-y-6">
+    {% csrf_token %}
+
+    <div class="flex items-center justify-between">
+      <label class="text-gray-700 font-medium">Email Notifications</label>
+      <input type="checkbox" name="email_notifications"
+             {% if preference.email_notifications %}checked{% endif %}
+             class="h-5 w-5 text-blue-600 rounded">
+    </div>
+
+    <div class="flex items-center justify-between">
+      <label class="text-gray-700 font-medium">Push Notifications</label>
+      <input type="checkbox" name="push_notifications"
+             {% if preference.push_notifications %}checked{% endif %}
+             class="h-5 w-5 text-blue-600 rounded">
+    </div>
+
+    <div class="flex items-center justify-between">
+      <label class="text-gray-700 font-medium">Lesson Reminders</label>
+      <input type="checkbox" name="lesson_reminders"
+             {% if preference.lesson_reminders %}checked{% endif %}
+             class="h-5 w-5 text-blue-600 rounded">
+    </div>
+
+    <div class="flex items-center justify-between">
+      <label class="text-gray-700 font-medium">Achievement Alerts</label>
+      <input type="checkbox" name="achievement_alerts"
+             {% if preference.achievement_alerts %}checked{% endif %}
+             class="h-5 w-5 text-blue-600 rounded">
+    </div>
+
+    <div class="flex items-center justify-between">
+      <label class="text-gray-700 font-medium">Weekly Progress Updates</label>
+      <input type="checkbox" name="weekly_progress"
+             {% if preference.weekly_progress %}checked{% endif %}
+             class="h-5 w-5 text-blue-600 rounded">
+    </div>
+
+    <button type="submit" class="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700">
+      Save Preferences
+    </button>
+  </form>
+</div>
+{% endblock %}
